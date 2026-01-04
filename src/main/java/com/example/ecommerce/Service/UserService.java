@@ -1,17 +1,21 @@
 package com.example.ecommerce.Service;
 
+import com.example.ecommerce.DTO.UserDto;
 import com.example.ecommerce.Entity.User;
 import com.example.ecommerce.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private  final UserRepository userRepository;
+    private final ModelMapper modelMapper;
 
 
     public Boolean deleteById(Long id) {
@@ -19,15 +23,22 @@ public class UserService {
          return true;
     }
 
-    public List<User> findAllUsers() {
-        return userRepository.findAll();
+    public List<UserDto> findAllUsers() {
+        return userRepository.findAll()
+                .stream()
+                .map(user -> modelMapper.map(user, UserDto.class))
+                .collect(Collectors.toList());
     }
 
-    public User findById(Long id) {
-        return userRepository.findById(id).orElseThrow();
+    public UserDto findById(Long id) {
+        return userRepository.findById(id).
+                map(user -> modelMapper.map(user , UserDto.class))
+                .orElseThrow();
     }
 
-    public User createUser(User user) {
-        return userRepository.save(user);
+    public UserDto createUser(UserDto dto) {
+        User user = modelMapper.map(dto , User.class);
+        User saved = userRepository.save(user);
+        return modelMapper.map(saved , UserDto.class);
     }
 }

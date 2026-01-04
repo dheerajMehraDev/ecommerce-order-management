@@ -1,5 +1,6 @@
 package com.example.ecommerce.Controller;
 
+import com.example.ecommerce.DTO.UserDto;
 import com.example.ecommerce.Entity.User;
 import com.example.ecommerce.Repository.UserRepository;
 import com.example.ecommerce.Service.UserService;
@@ -19,14 +20,14 @@ public class UserController {
 // create user
 
     @PostMapping
-    public User createUser(@RequestBody User user){
-       return userService.createUser(user);
+    public UserDto createUser(@RequestBody UserDto dto){
+       return userService.createUser(dto);
     }
 
 // get user
 
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable Long id ){
+    public UserDto getUserById(@PathVariable Long id ){
         return userService.findById(id);
     }
 
@@ -34,7 +35,7 @@ public class UserController {
 // get all user
 
     @GetMapping
-    public List<User> getAll(){
+    public List<UserDto> getAll(){
         return userService.findAllUsers();
     }
 
