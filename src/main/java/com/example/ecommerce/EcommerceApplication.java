@@ -12,33 +12,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import java.util.Map;
 
 @SpringBootApplication
-public class EcommerceApplication implements CommandLineRunner {
-
-//	@Autowired
-//	@Qualifier("EmailNotificationService")
-//	private  NotificationService notificationService ;
+public class EcommerceApplication {
 
 	@Autowired
 	private Map<String , NotificationService> notificationServiceMap;
-
-//    public EcommerceApplication(NotificationService notificationService) {
-//        this.notificationService = notificationService;
-//    }
-
-//	@Autowired
-//	public void SetNotificationService(NotificationService notificationService){
-//		this.notificationService = notificationService;
-//	}
 
     public static void main(String[] args) {
 		SpringApplication.run(EcommerceApplication.class, args);
 	}
 
-	@Override
-	public void run(String... args) throws Exception {
-		System.out.println("running");
-		for(var entry : notificationServiceMap.entrySet()){
-			entry.getValue().send();
-		}
-	}
 }
