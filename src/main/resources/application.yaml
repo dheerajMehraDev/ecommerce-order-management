@@ -2,5 +2,5 @@ spring:
   application:
     name: ecommerce
 notification:
-  type:sms
+#  type:sms
 debug : true

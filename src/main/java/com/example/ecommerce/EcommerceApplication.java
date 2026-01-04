@@ -9,21 +9,26 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.util.Map;
+
 @SpringBootApplication
 public class EcommerceApplication implements CommandLineRunner {
 
 //	@Autowired
-	@Qualifier("EmailNotificationService")
-	private  NotificationService notificationService ;
+//	@Qualifier("EmailNotificationService")
+//	private  NotificationService notificationService ;
+
+	@Autowired
+	private Map<String , NotificationService> notificationServiceMap;
 
 //    public EcommerceApplication(NotificationService notificationService) {
 //        this.notificationService = notificationService;
 //    }
 
-	@Autowired
-	public void SetNotificationService(NotificationService notificationService){
-		this.notificationService = notificationService;
-	}
+//	@Autowired
+//	public void SetNotificationService(NotificationService notificationService){
+//		this.notificationService = notificationService;
+//	}
 
     public static void main(String[] args) {
 		SpringApplication.run(EcommerceApplication.class, args);
@@ -32,6 +37,8 @@ public class EcommerceApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		System.out.println("running");
-		notificationService.send();
+		for(var entry : notificationServiceMap.entrySet()){
+			entry.getValue().send();
+		}
 	}
 }
