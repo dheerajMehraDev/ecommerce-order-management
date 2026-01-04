@@ -12,10 +12,20 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class EcommerceApplication implements CommandLineRunner {
 
+//	@Autowired
+	@Qualifier("SmsNotificationService")
+	private  NotificationService notificationService ;
+
+//    public EcommerceApplication(NotificationService notificationService) {
+//        this.notificationService = notificationService;
+//    }
+
 	@Autowired
-	@Qualifier("EmailNotificationService")
-	private NotificationService notificationService ;
-	public static void main(String[] args) {
+	public void SetNotificationService(NotificationService notificationService){
+		this.notificationService = notificationService;
+	}
+
+    public static void main(String[] args) {
 		SpringApplication.run(EcommerceApplication.class, args);
 	}
 
