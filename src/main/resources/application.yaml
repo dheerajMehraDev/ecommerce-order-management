@@ -4,3 +4,6 @@ spring:
 notification:
 #  type:sms
 debug : true
+
+server:
+  port : 9000
