@@ -13,7 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class EcommerceApplication implements CommandLineRunner {
 
 //	@Autowired
-	@Qualifier("SmsNotificationService")
+	@Qualifier("EmailNotificationService")
 	private  NotificationService notificationService ;
 
 //    public EcommerceApplication(NotificationService notificationService) {

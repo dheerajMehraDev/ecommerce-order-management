@@ -2,11 +2,13 @@ package com.example.ecommerce.Test;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 @Component("EmailNotificationService")
 @Primary
+@ConditionalOnProperty(name = "notification.type" , havingValue = "email")
 public class EmailNotificationService implements NotificationService{
     @Override
     public void send() {
