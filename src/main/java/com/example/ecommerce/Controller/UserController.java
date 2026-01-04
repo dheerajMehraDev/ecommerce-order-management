@@ -1,12 +1,10 @@
 package com.example.ecommerce.Controller;
 
 import com.example.ecommerce.DTO.UserDto;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/user/")
 public class UserController {
 
     @GetMapping("/getSecretKey")
@@ -22,6 +20,18 @@ public class UserController {
     @GetMapping("/get")
     public String useRequestParam(@RequestParam Integer age, @RequestParam String sortBy){
         return " the age is " + age + "and sortBy " + sortBy;
+    }
+
+    @PostMapping
+    public Boolean createUser(@RequestBody UserDto userDto){
+        System.out.println("created the user with user id "+ userDto.getId());
+        return true;
+    }
+
+    @PutMapping
+    public Boolean updateUser(){
+        System.out.println("updated ");
+        return true;
     }
 
 }
