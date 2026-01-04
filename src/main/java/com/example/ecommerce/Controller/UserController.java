@@ -2,6 +2,7 @@ package com.example.ecommerce.Controller;
 
 import com.example.ecommerce.Entity.User;
 import com.example.ecommerce.Repository.UserRepository;
+import com.example.ecommerce.Service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,21 +13,21 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
 
 // create user
 
     @PostMapping
     public User createUser(@RequestBody User user){
-       return userRepository.save(user);
+       return userService.createUser(user);
     }
 
 // get user
 
     @GetMapping("/{id}")
     public User getUserById(@PathVariable Long id ){
-        return userRepository.findById(id).orElseThrow();
+        return userService.findById(id);
     }
 
 
@@ -34,15 +35,14 @@ public class UserController {
 
     @GetMapping
     public List<User> getAll(){
-        return userRepository.findAll();
+        return userService.findAllUsers();
     }
 
 // delete user
 
     @DeleteMapping("/{id}")
     public Boolean deleteById(@PathVariable Long id ){
-        userRepository.deleteById(id);
-        return true;
+       return userService.deleteById(id);
     }
 
 // update the user
