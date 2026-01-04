@@ -3,3 +3,4 @@ spring:
     name: ecommerce
 notification:
   type:sms
+debug : true
