@@ -1,9 +1,19 @@
+server:
+  port : 9000
 spring:
   application:
     name: ecommerce
-notification:
-#  type:sms
-debug : true
+  h2:
+    console:
+      enabled: true
+  datasource:
+    url: jdbc:h2:file:D:/Learning/preparation/h2Db
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa.hibernate.ddl-auto: update
+  #debug : true
 
-server:
-  port : 9000
+
+
+
