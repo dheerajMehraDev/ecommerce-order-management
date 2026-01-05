@@ -1,5 +1,6 @@
 package com.example.ecommerce.Service;
 
+import com.example.ecommerce.Advices.ExceptionHandling.CustomExceptions.ResourceNotFoundException;
 import com.example.ecommerce.DTO.UserDto;
 import com.example.ecommerce.Entity.User;
 import com.example.ecommerce.Repository.UserRepository;
@@ -24,7 +25,8 @@ public class UserService {
 
     public ResponseEntity<Boolean> deleteById(Long id) {
         boolean isExist = userRepository.existsById(id);
-        if(!isExist) return ResponseEntity.notFound().build();
+        if(!isExist)
+                throw new ResourceNotFoundException(" resource with id " + id + " does not exist");
         userRepository.deleteById(id);
          return ResponseEntity.ok(Boolean.TRUE);
     }
@@ -39,7 +41,8 @@ public class UserService {
 
     public ResponseEntity<UserDto> findById(Long id) {
         User user = userRepository.findById(id).orElse(null);
-        if(user == null) return ResponseEntity.notFound().build();
+        if(user == null)
+            throw new ResourceNotFoundException(" resource with id " + id + " does not exist");
         return ResponseEntity.ok(modelMapper.map(user, UserDto.class));
     }
 
@@ -51,7 +54,8 @@ public class UserService {
 
     public ResponseEntity<UserDto> updateUserById(Long id, UserDto userDto) throws Exception {
         boolean isExist = userRepository.existsById(id);
-        if(!isExist) return ResponseEntity.notFound().build();
+        if(!isExist)
+            throw new ResourceNotFoundException(" resource with id " + id + " does not exist");
 
 
         User user = modelMapper.map(userDto , User.class);
@@ -63,7 +67,8 @@ public class UserService {
     public ResponseEntity<UserDto> partiallyUpdateUserById(Long id, Map<String, Object> map) throws Exception {
 
         boolean isExist = userRepository.existsById(id);
-        if(!isExist) ResponseEntity.notFound().build();
+        if(!isExist)
+            throw new ResourceNotFoundException(" resource with id " + id + " does not exist");
 
         User user = userRepository.findById(id).orElseThrow();
 
