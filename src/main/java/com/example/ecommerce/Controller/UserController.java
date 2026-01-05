@@ -64,11 +64,11 @@ public class UserController {
     }
 
 
-// handle exception in this controller
+/*// handle exception in this controller
 
     public ResponseEntity<String> handlerExceptionInUserController(Exception e){
         return ResponseEntity.badRequest().build();
-    }
+    }*/
 
 
 
