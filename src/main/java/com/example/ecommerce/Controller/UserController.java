@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -48,8 +49,17 @@ public class UserController {
 
 // update the user
 
+    @PutMapping("/{id}")
+    public UserDto updateUserById(@PathVariable Long id , @RequestBody UserDto userDto) throws Exception {
+        return userService.updateUserById(id,userDto);
+    }
+
 
 // partially update the user
+    @PatchMapping("/{id}")
+    public UserDto partiallyUpdateTheUserById(@PathVariable Long id , @RequestBody Map<String, Object> map) throws Exception {
+        return userService.partiallyUpdateUserById(id,map);
+    }
 
 
 
