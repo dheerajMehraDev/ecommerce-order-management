@@ -4,6 +4,7 @@ import com.example.ecommerce.DTO.UserDto;
 import com.example.ecommerce.Entity.User;
 import com.example.ecommerce.Repository.UserRepository;
 import com.example.ecommerce.Service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class UserController {
 // create user
 
     @PostMapping
-    public ResponseEntity<UserDto> createUser(@RequestBody UserDto dto){
+    public ResponseEntity<UserDto> createUser(@RequestBody @Valid UserDto dto){
        return userService.createUser(dto);
     }
 
