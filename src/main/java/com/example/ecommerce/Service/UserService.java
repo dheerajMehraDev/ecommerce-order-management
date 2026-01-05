@@ -5,13 +5,14 @@ import com.example.ecommerce.Entity.User;
 import com.example.ecommerce.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+
 
 @Service
 @RequiredArgsConstructor
@@ -21,45 +22,48 @@ public class UserService {
     private final ModelMapper modelMapper;
 
 
-    public Boolean deleteById(Long id) {
+    public ResponseEntity<Boolean> deleteById(Long id) {
         boolean isExist = userRepository.existsById(id);
-        if(!isExist) return false;
+        if(!isExist) return ResponseEntity.notFound().build();
         userRepository.deleteById(id);
-         return true;
+         return ResponseEntity.ok(Boolean.TRUE);
     }
 
-    public List<UserDto> findAllUsers() {
-        return userRepository.findAll()
+    public ResponseEntity<List<UserDto>> findAllUsers() {
+         List<UserDto> userDtoList =   userRepository.findAll()
                 .stream()
                 .map(user -> modelMapper.map(user, UserDto.class))
-                .collect(Collectors.toList());
+                .toList();
+         return ResponseEntity.ok(userDtoList);
     }
 
-    public UserDto findById(Long id) {
-        return userRepository.findById(id).
-                map(user -> modelMapper.map(user , UserDto.class))
-                .orElseThrow();
+    public ResponseEntity<UserDto> findById(Long id) {
+        User user = userRepository.findById(id).orElse(null);
+        if(user == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(modelMapper.map(user, UserDto.class));
     }
 
-    public UserDto createUser(UserDto dto) {
+    public ResponseEntity<UserDto> createUser(UserDto dto) {
         User user = modelMapper.map(dto , User.class);
         User saved = userRepository.save(user);
-        return modelMapper.map(saved , UserDto.class);
+        return ResponseEntity.ok(modelMapper.map(saved, UserDto.class));
     }
 
-    public UserDto updateUserById(Long id, UserDto userDto) throws Exception {
+    public ResponseEntity<UserDto> updateUserById(Long id, UserDto userDto) throws Exception {
         boolean isExist = userRepository.existsById(id);
-        if(!isExist) throw new Exception("User does not exist");
+        if(!isExist) return ResponseEntity.notFound().build();
+
 
         User user = modelMapper.map(userDto , User.class);
-        return modelMapper.map(userRepository.save(user) , UserDto.class);
+        UserDto dto = modelMapper.map( userRepository.save(user) , UserDto.class);
+        return ResponseEntity.ok(dto);
     }
 
 
-    public UserDto partiallyUpdateUserById(Long id, Map<String, Object> map) throws Exception {
+    public ResponseEntity<UserDto> partiallyUpdateUserById(Long id, Map<String, Object> map) throws Exception {
 
         boolean isExist = userRepository.existsById(id);
-        if(!isExist) throw new Exception("employee does not exist");
+        if(!isExist) ResponseEntity.notFound().build();
 
         User user = userRepository.findById(id).orElseThrow();
 
@@ -69,7 +73,7 @@ public class UserService {
             ReflectionUtils.setField(field,user,value);
         });
         User savedUser = userRepository.save(user);
-        return modelMapper.map(savedUser,UserDto.class);
+        return ResponseEntity.ok(modelMapper.map(savedUser,UserDto.class));
 
     }
 }
