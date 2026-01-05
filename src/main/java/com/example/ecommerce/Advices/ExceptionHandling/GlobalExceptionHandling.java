@@ -1,8 +1,8 @@
 package com.example.ecommerce.Advices.ExceptionHandling;
 
+import com.example.ecommerce.Advices.ApiResponse.ApiResponse;
 import com.example.ecommerce.Advices.ExceptionHandling.CustomExceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,15 +14,16 @@ import java.util.List;
 public class GlobalExceptionHandling {
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ApiError> handleAllExceptions(ResourceNotFoundException e){
+    public ResponseEntity<ApiResponse<?>> handleAllExceptions(ResourceNotFoundException e){
 
 
        ApiError apiError = ApiError.builder().message(e.getMessage())
                .httpStatus(HttpStatus.BAD_REQUEST).build();
-       return new ResponseEntity<>(apiError,HttpStatus.BAD_REQUEST);
+       ApiResponse apiResponse = ApiResponse.builder().apiError(apiError).build();
+       return new ResponseEntity<>(apiResponse,HttpStatus.BAD_REQUEST);
     }
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiError> handleAllExceptions(MethodArgumentNotValidException e){
+    public ResponseEntity<ApiResponse<?>> handleAllExceptions(MethodArgumentNotValidException e){
 
         List<String> list =
                 e.getBindingResult().getAllErrors().stream()
@@ -31,7 +32,8 @@ public class GlobalExceptionHandling {
 
         ApiError apiError = ApiError.builder().message(list.toString())
                 .httpStatus(HttpStatus.BAD_REQUEST).build();
-        return new ResponseEntity<>(apiError,HttpStatus.BAD_REQUEST);
+        ApiResponse apiResponse = ApiResponse.builder().apiError(apiError).build();
+        return new ResponseEntity<>(apiResponse,HttpStatus.BAD_REQUEST);
     }
 
 }
