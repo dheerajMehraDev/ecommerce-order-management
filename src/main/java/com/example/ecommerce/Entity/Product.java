@@ -1,12 +1,14 @@
 package com.example.ecommerce.Entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "products")
+@Data
 public class Product {
 
     @Id
