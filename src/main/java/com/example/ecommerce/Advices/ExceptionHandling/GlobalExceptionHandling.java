@@ -9,31 +9,65 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandling {
 
+    // 404 - resource not found
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ApiResponse<?>> handleAllExceptions(ResourceNotFoundException e){
+    public ResponseEntity<ApiResponse<?>> handleResourceNotFound(ResourceNotFoundException e) {
 
+        ApiError apiError = ApiError.builder()
+                .message(e.getMessage())
+                .httpStatus(HttpStatus.NOT_FOUND)
+                .build();
 
-       ApiError apiError = ApiError.builder().message(e.getMessage())
-               .httpStatus(HttpStatus.BAD_REQUEST).build();
-       ApiResponse apiResponse = ApiResponse.builder().apiError(apiError).build();
-       return new ResponseEntity<>(apiResponse,HttpStatus.BAD_REQUEST);
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ApiResponse.builder().apiError(apiError).build());
     }
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiResponse<?>> handleAllExceptions(MethodArgumentNotValidException e){
 
-        List<String> list =
-                e.getBindingResult().getAllErrors().stream()
+    // 400 - validation error
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiResponse<?>> handleValidationException(MethodArgumentNotValidException e) {
+
+        List<String> errors = e.getBindingResult()
+                .getAllErrors()
+                .stream()
                 .map(error -> error.getDefaultMessage())
                 .toList();
 
-        ApiError apiError = ApiError.builder().message(list.toString())
-                .httpStatus(HttpStatus.BAD_REQUEST).build();
-        ApiResponse apiResponse = ApiResponse.builder().apiError(apiError).build();
-        return new ResponseEntity<>(apiResponse,HttpStatus.BAD_REQUEST);
+        ApiError apiError = ApiError.builder()
+                .message(errors.toString())
+                .httpStatus(HttpStatus.BAD_REQUEST)
+                .build();
+
+        return ResponseEntity
+                .badRequest()
+                .body(ApiResponse.builder().apiError(apiError).build());
     }
 
+    // 400 - bad JSON / wrong input
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ApiResponse<?>> handleIllegalArgument(IllegalArgumentException e) {
+        return buildError(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    // 500 - fallback
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiResponse<?>> handleGeneric(Exception e) {
+        return buildError("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    private ResponseEntity<ApiResponse<?>> buildError(String msg, HttpStatus status) {
+        ApiError apiError = ApiError.builder()
+                .message(msg)
+                .httpStatus(status)
+                .build();
+
+        return ResponseEntity
+                .status(status)
+                .body(ApiResponse.builder().apiError(apiError).build());
+    }
 }
