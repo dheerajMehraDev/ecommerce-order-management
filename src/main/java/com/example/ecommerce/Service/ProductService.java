@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -73,9 +74,26 @@ public class ProductService {
             Field field = ReflectionUtils.findField(Product.class, key);
             if (field != null) {
                 field.setAccessible(true);
+
+                // ✅ Handle BigDecimal conversion
+                if (field.getType().equals(BigDecimal.class)) {
+                    value = new BigDecimal(value.toString());
+                }
+
+                //  Handle Integer conversion
+                if (field.getType().equals(Integer.class)) {
+                    value = Integer.valueOf(value.toString());
+                }
+
+                //  Handle Boolean conversion
+                if (field.getType().equals(Boolean.class)) {
+                    value = Boolean.valueOf(value.toString());
+                }
+
                 ReflectionUtils.setField(field, product, value);
             }
         });
+
 
         Product savedProduct = productRepository.save(product);
         return ResponseEntity.ok(modelMapper.map(savedProduct, ProductDTO.class));
