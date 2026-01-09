@@ -5,7 +5,11 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users" , schema = "ecommerce" ,
+uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"email", "password"})
+}
+)
 @Getter
 @Setter
 @AllArgsConstructor
