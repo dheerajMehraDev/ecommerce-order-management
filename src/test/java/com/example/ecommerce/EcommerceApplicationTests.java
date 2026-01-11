@@ -1,5 +1,6 @@
 package com.example.ecommerce;
 
+import com.example.ecommerce.DTO.IUserDto;
 import com.example.ecommerce.Entity.User;
 import com.example.ecommerce.Repository.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -37,6 +38,16 @@ class EcommerceApplicationTests {
 
 		Optional<User> byEmailNative = userRepository.findByEmailNative("john@example.com");
 		byEmailNative.ifPresent(System.out::println);
+	}
+
+	@Test
+	void testProjection(){
+		List<IUserDto> allUsers = userRepository.findAllUsers();
+		allUsers.forEach(user ->{
+			System.out.println(user.getId());
+			System.out.println(" ");
+			System.out.println(user.getName());
+		});
 	}
 
 

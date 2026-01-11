@@ -1,5 +1,6 @@
 package com.example.ecommerce.Repository;
 
+import com.example.ecommerce.DTO.IUserDto;
 import com.example.ecommerce.Entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -39,4 +40,11 @@ public interface UserRepository extends JpaRepository<User,Long> {
     Optional<User> findByEmailNative(String email);
 
     List<User> findByNameContainingIgnoreCaseOrderByEmail(String a);
+
+    @Query("""
+       SELECT u.id AS id,
+              u.name AS name
+       FROM User u
+       """)
+    List<IUserDto> findAllUsers();
 }
