@@ -35,7 +35,7 @@ public class Product {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
     // product is child in db , and owning side in orm

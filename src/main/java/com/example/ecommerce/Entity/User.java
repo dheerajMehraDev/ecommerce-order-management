@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "users" , schema = "ecommerce" ,
@@ -38,7 +39,7 @@ public class User {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @OneToOne(mappedBy = "user")
-    private Product product;
+    @OneToMany(mappedBy = "user")
+    private List<Product> productList;
 
 }
