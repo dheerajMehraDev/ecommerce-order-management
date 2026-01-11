@@ -1,27 +1,71 @@
-INSERT INTO users (name, email, password, created_at, updated_at) VALUES
+-- USERS
+INSERT INTO users (name, email, password) VALUES
+                                              ('Admin', 'admin@shop.com', 'admin123'),
+                                              ('John', 'john@shop.com', 'john123');
 
--- 🔹 ADMIN / SYSTEM USERS
-('Admin User', 'admin@example.com', 'admin123', NOW(), NOW()),
-('Super Admin', 'superadmin@example.com', 'super123', NOW(), NOW()),
+INSERT INTO products
+(name, description, price, quantity, category, active, created_at, updated_at)
+VALUES
 
--- 🔹 NORMAL CUSTOMERS
-('John Doe', 'john@example.com', 'john123', NOW(), NOW()),
-('Jane Smith', 'jane@example.com', 'jane123', NOW(), NOW()),
-('Mike Ross', 'mike@example.com', 'mike123', NOW(), NOW()),
+-- Electronics
+('iPhone 15',
+ 'Latest Apple smartphone',
+ 80000.00,
+ 50,
+ 'ELECTRONICS',
+ true,
+ NOW(), NOW()),
 
--- 🔹 GUEST / TEMP USERS
-('Guest User', 'guest1@example.com', 'guest123', NOW(), NOW()),
-('Temp User', 'temp@example.com', 'temp123', NOW(), NOW()),
+('MacBook Air M2',
+ 'Apple laptop with M2 chip',
+ 120000.00,
+ 30,
+ 'ELECTRONICS',
+ true,
+ NOW(), NOW()),
 
--- 🔹 EDGE / TEST CASE USERS
-('SingleName', 'singlename@example.com', 'single123', NOW(), NOW()),
-('Long Name User For Testing', 'longnameuser@example.com', 'long123', NOW(), NOW()),
+-- Accessories
+('Wireless Headphones',
+ 'Noise cancelling headphones',
+ 3000.00,
+ 100,
+ 'ACCESSORIES',
+ true,
+ NOW(), NOW()),
 
--- 🔹 OLDER USERS (date variation)
-('Old User 1', 'old1@example.com', 'old123',
- DATE_SUB(NOW(), INTERVAL 30 DAY),
- DATE_SUB(NOW(), INTERVAL 30 DAY)),
+-- Clothing
+('Men T-Shirt',
+ 'Cotton casual t-shirt',
+ 799.00,
+ 200,
+ 'CLOTHING',
+ true,
+ NOW(), NOW()),
 
-('Old User 2', 'old2@example.com', 'old123',
- DATE_SUB(NOW(), INTERVAL 90 DAY),
- DATE_SUB(NOW(), INTERVAL 90 DAY));
+('Women Jeans',
+ 'Slim fit denim jeans',
+ 1999.00,
+ 150,
+ 'CLOTHING',
+ true,
+ NOW(), NOW()),
+
+-- Home Appliances
+('Mixer Grinder',
+ '750W mixer grinder',
+ 4500.00,
+ 40,
+ 'HOME_APPLIANCES',
+ true,
+ NOW(), NOW()),
+
+-- Inactive / out-of-stock (edge cases)
+('Old Model Phone',
+ 'Discontinued phone model',
+ 15000.00,
+ 0,
+ 'ELECTRONICS',
+ false,
+ NOW(), NOW());
+
+

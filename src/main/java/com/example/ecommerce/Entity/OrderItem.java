@@ -1,19 +1,21 @@
 package com.example.ecommerce.Entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
-class OrderItem {
+@Data
+public class OrderItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id")
     private Order order;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id")
     private Product product;
 

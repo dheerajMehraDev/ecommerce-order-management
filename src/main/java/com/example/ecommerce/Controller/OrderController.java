@@ -1,6 +1,8 @@
 package com.example.ecommerce.Controller;
 
 import com.example.ecommerce.DTO.OrderDto;
+import com.example.ecommerce.DTO.OrderRequestDto;
+import com.example.ecommerce.DTO.OrderResponseDto;
 import com.example.ecommerce.Service.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,11 +19,17 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    // CREATE
+    /*// CREATE
     @PostMapping
     public ResponseEntity<OrderDto> create(@RequestBody @Valid OrderDto dto) {
         return orderService.createOrder(dto);
+    }*/
+
+    @PostMapping
+    public ResponseEntity<OrderResponseDto> placeOrder(@RequestBody OrderRequestDto dto) {
+        return ResponseEntity.ok(orderService.placeOrder(dto));
     }
+
 
     // READ by id
     @GetMapping("/{id}")

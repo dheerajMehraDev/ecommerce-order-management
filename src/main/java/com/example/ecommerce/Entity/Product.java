@@ -23,7 +23,7 @@ public class Product {
 
     private String description;
 
-    private BigDecimal price;
+    private Double price;
 
     private Integer quantity;   // stock
 
@@ -36,11 +36,6 @@ public class Product {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-    // product is child in db , and owning side in orm
 
     @OneToMany(mappedBy = "product")
     private List<OrderItem> orderItems = new ArrayList<>();
