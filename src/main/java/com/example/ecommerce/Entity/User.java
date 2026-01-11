@@ -3,9 +3,17 @@ package com.example.ecommerce.Entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users" , schema = "ecommerce" ,
+uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"email", "password"})
+}
+)
 @Getter
 @Setter
 @AllArgsConstructor
@@ -21,5 +29,11 @@ public class User {
     private String email;
 
     private String password;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
 }
