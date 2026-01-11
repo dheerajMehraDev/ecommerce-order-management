@@ -22,14 +22,16 @@ spring:
     init:
       mode: always
       data-locations: classpath:data.sql
+#Actuator
 management:
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: health,info
   endpoint:
     health:
       show-details: always
+
 
 #  devtools:
 #    restart:
