@@ -1,13 +1,13 @@
 package com.example.ecommerce;
 
-import com.example.ecommerce.DTO.IUserDto;
+import com.example.ecommerce.DTO.Projection.IUserDto;
+import com.example.ecommerce.DTO.Projection.UserDtoProjection;
 import com.example.ecommerce.Entity.User;
 import com.example.ecommerce.Repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,13 +41,19 @@ class EcommerceApplicationTests {
 	}
 
 	@Test
-	void testProjection(){
+	void testIProjection(){
 		List<IUserDto> allUsers = userRepository.findAllUsers();
 		allUsers.forEach(user ->{
 			System.out.println(user.getId());
 			System.out.println(" ");
 			System.out.println(user.getName());
 		});
+	}
+
+	@Test
+	void testConcreteProjection(){
+		List<UserDtoProjection> allUsers = userRepository.findAllConcreteUsers();
+		allUsers.forEach(System.out::println);
 	}
 
 

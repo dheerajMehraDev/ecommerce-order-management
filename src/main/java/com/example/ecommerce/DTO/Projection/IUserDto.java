@@ -1,7 +1,4 @@
-package com.example.ecommerce.DTO;
-
-
-import lombok.Data;
+package com.example.ecommerce.DTO.Projection;
 
 
 public interface IUserDto {

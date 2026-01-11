@@ -1,12 +1,12 @@
 package com.example.ecommerce.Repository;
 
-import com.example.ecommerce.DTO.IUserDto;
+import com.example.ecommerce.DTO.Projection.IUserDto;
+import com.example.ecommerce.DTO.Projection.UserDtoProjection;
 import com.example.ecommerce.Entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -47,4 +47,13 @@ public interface UserRepository extends JpaRepository<User,Long> {
        FROM User u
        """)
     List<IUserDto> findAllUsers();
+
+    @Query("""
+       SELECT new com.example.ecommerce.DTO.Projection.UserDtoProjection(
+           u.id,
+           u.name
+       )
+       FROM User u
+       """)
+    List<UserDtoProjection> findAllConcreteUsers();
 }
