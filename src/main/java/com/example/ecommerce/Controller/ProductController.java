@@ -1,5 +1,7 @@
 package com.example.ecommerce.Controller;
 
+import com.example.ecommerce.Advices.ApiResponse.ApiResponse;
+import com.example.ecommerce.DTO.FakeApiDtos.FakeProductDto;
 import com.example.ecommerce.DTO.ProductDTO;
 import com.example.ecommerce.Service.ProductService;
 import jakarta.validation.Valid;
@@ -55,5 +57,10 @@ public class ProductController {
             @PathVariable Long id,
             @RequestBody Map<String, Object> map) throws Exception {
         return productService.partiallyUpdateProductById(id, map);
+    }
+
+    @GetMapping("/fakestore")
+    public ApiResponse<List<FakeProductDto>> getFakeProducts(){
+        return productService.getFakeProducts();
     }
 }

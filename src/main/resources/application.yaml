@@ -1,3 +1,4 @@
+fakeStore.api : "https://fakestoreapi.com/products"
 server:
   port : 9000
 spring:
