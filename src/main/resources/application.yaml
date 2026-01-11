@@ -22,6 +22,15 @@ spring:
     init:
       mode: always
       data-locations: classpath:data.sql
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
 #  devtools:
 #    restart:
 #      enabled: true          # enable/disable auto restart
