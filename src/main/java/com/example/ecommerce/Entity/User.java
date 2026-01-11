@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,6 +25,8 @@ uniqueConstraints = {
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
+@EntityListeners(AuditingEntityListener.class)
+
 public class User {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,10 +39,12 @@ public class User {
 
     private String password;
 
-    @CreationTimestamp
+    //    @CreationTimestamp
+    @CreatedDate
     private LocalDateTime createdAt;
 
-    @UpdateTimestamp
+    //    @UpdateTimestamp
+    @LastModifiedDate
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "user")
