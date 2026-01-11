@@ -1,3 +1,9 @@
+fakeStore.api : "https://fakestoreapi.com/products"
+#logging:
+#  level:
+#    root: INFO
+#    com.example.ecommerce: INFO
+logging.file.name : console.log
 server:
   port : 9000
 spring:
@@ -15,7 +21,26 @@ spring:
   sql:
     init:
       mode: always
-      #debug : true
+      data-locations: classpath:data.sql
+#Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
+
+
+#  devtools:
+#    restart:
+#      enabled: true          # enable/disable auto restart
+#      additional-paths: src/main/java
+#      exclude: static/**,public/**
+#    livereload:
+#      enabled: true
+    #debug : true
       #  h2:
       #    console:
       #      enabled: true

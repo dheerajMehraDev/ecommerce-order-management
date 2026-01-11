@@ -1,17 +1,24 @@
 package com.example.ecommerce.Service;
 
+import com.example.ecommerce.Advices.ApiResponse.ApiResponse;
 import com.example.ecommerce.Advices.ExceptionHandling.CustomExceptions.ResourceNotFoundException;
+import com.example.ecommerce.DTO.FakeApiDtos.FakeProductDto;
 import com.example.ecommerce.DTO.ProductDTO;
 import com.example.ecommerce.Entity.Product;
 import com.example.ecommerce.Repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.web.client.RestClient;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +26,10 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ProductService {
 
+    @Value("${fakestore.api}")
+    private String api;
+    @Autowired
+     private  RestClient restClient;
     private final ProductRepository productRepository;
     private final ModelMapper modelMapper;
 
@@ -75,7 +86,7 @@ public class ProductService {
             if (field != null) {
                 field.setAccessible(true);
 
-                // ✅ Handle BigDecimal conversion
+                //  Handle BigDecimal conversion
                 if (field.getType().equals(BigDecimal.class)) {
                     value = new BigDecimal(value.toString());
                 }
@@ -98,4 +109,18 @@ public class ProductService {
         Product savedProduct = productRepository.save(product);
         return ResponseEntity.ok(modelMapper.map(savedProduct, ProductDTO.class));
     }
+
+    public ApiResponse<List<FakeProductDto>> getFakeProducts() {
+
+        List<FakeProductDto> productDtos = restClient
+                .get()
+                .uri(api)
+                .retrieve()
+                .body(new ParameterizedTypeReference<List<FakeProductDto>>() {});
+
+        return ApiResponse.<List<FakeProductDto>>builder()
+                .data(productDtos)
+                .build();
+    }
+
 }
