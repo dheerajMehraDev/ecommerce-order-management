@@ -14,8 +14,14 @@ spring:
     show-sql: true
   sql:
     init:
-      mode: always
-      #debug : true
+  devtools:
+    restart:
+      enabled: true          # enable/disable auto restart
+      additional-paths: src/main/java
+      exclude: static/**,public/**
+    livereload:
+      enabled: true
+    #debug : true
       #  h2:
       #    console:
       #      enabled: true
