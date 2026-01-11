@@ -6,6 +6,10 @@ import com.example.ecommerce.Repository.UserRepository;
 import com.example.ecommerce.Service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +22,7 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
+    private final UserRepository userRepository;
 
 
 // create user
@@ -63,6 +68,20 @@ public class UserController {
         return userService.partiallyUpdateUserById(id,map);
     }
 
+
+
+    @GetMapping("/testSort")
+    public Page<User> getListOfUser(@RequestParam(defaultValue = "id") String sortBy,
+                                    @RequestParam(defaultValue = "1") Integer number ,
+                                    @RequestParam(defaultValue = "5" ) Integer size
+                                    )
+    {
+//        return userRepository.findByNameContainingIgnoreCaseOrderByEmail("a");
+//            return userRepository.findAll(Sort.by(Sort.Direction.DESC , sortBy));
+        Sort sort = Sort.by(sortBy);
+        Pageable pageable = PageRequest.of(number,size,sort);
+        return   userRepository.findAll(pageable);
+    }
 
 /*// handle exception in this controller
 
