@@ -71,10 +71,15 @@ public class UserController {
 
 
     @GetMapping("/testSort")
-    public Page<User> getListOfUser(@RequestParam(defaultValue = "id" , required = false) String sortBy){
+    public Page<User> getListOfUser(@RequestParam(defaultValue = "id") String sortBy,
+                                    @RequestParam(defaultValue = "1") Integer number ,
+                                    @RequestParam(defaultValue = "5" ) Integer size
+                                    )
+    {
 //        return userRepository.findByNameContainingIgnoreCaseOrderByEmail("a");
 //            return userRepository.findAll(Sort.by(Sort.Direction.DESC , sortBy));
-        Pageable pageable = PageRequest.of(0,3);
+        Sort sort = Sort.by(sortBy);
+        Pageable pageable = PageRequest.of(number,size,sort);
         return   userRepository.findAll(pageable);
     }
 
