@@ -1,4 +1,9 @@
 fakeStore.api : "https://fakestoreapi.com/products"
+#logging:
+#  level:
+#    root: INFO
+#    com.example.ecommerce: INFO
+logging.file.name : console.log
 server:
   port : 9000
 spring:

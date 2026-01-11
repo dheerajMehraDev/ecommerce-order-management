@@ -11,6 +11,7 @@ import com.example.ecommerce.Repository.ProductRepository;
 import com.example.ecommerce.Repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class OrderService {
@@ -30,85 +32,121 @@ public class OrderService {
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
 
-    // CREATE
-    public ResponseEntity<OrderDto> createOrder(OrderDto dto) {
-        Order order = modelMapper.map(dto, Order.class);
-        Order saved = orderRepository.save(order);
-        return ResponseEntity.ok(modelMapper.map(saved, OrderDto.class));
-    }
-
     // READ by id
     public ResponseEntity<OrderDto> findById(Long id) {
+        log.info("Fetching order by id={}", id);
+
         Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id " + id));
+                .orElseThrow(() -> {
+                    log.warn("Order not found with id={}", id);
+                    return new ResourceNotFoundException("Order not found with id " + id);
+                });
+
+        log.info("Order found with id={}", id);
         return ResponseEntity.ok(modelMapper.map(order, OrderDto.class));
     }
 
     // READ all
     public ResponseEntity<List<OrderDto>> findAll() {
+        log.info("Fetching all orders");
+
         List<OrderDto> orders = orderRepository.findAll()
                 .stream()
                 .map(o -> modelMapper.map(o, OrderDto.class))
                 .toList();
+
+        log.info("Total orders fetched={}", orders.size());
         return ResponseEntity.ok(orders);
     }
 
-    // UPDATE (status only, logically)
+    // UPDATE
     public ResponseEntity<OrderDto> updateOrder(Long id, OrderDto dto) {
+        log.info("Updating order id={} with status={}", id, dto.getStatus());
+
         Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id " + id));
+                .orElseThrow(() -> {
+                    log.warn("Order not found for update, id={}", id);
+                    return new ResourceNotFoundException("Order not found with id " + id);
+                });
 
         order.setStatus(dto.getStatus());
         Order saved = orderRepository.save(order);
 
+        log.info("Order updated successfully, id={}", id);
         return ResponseEntity.ok(modelMapper.map(saved, OrderDto.class));
     }
 
     // PARTIAL UPDATE
     public ResponseEntity<OrderDto> partialUpdate(Long id, Map<String, Object> map) {
+        log.info("Partial update for order id={}, fields={}", id, map.keySet());
+
         Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id " + id));
+                .orElseThrow(() -> {
+                    log.warn("Order not found for partial update, id={}", id);
+                    return new ResourceNotFoundException("Order not found with id " + id);
+                });
 
         map.forEach((key, value) -> {
             Field field = ReflectionUtils.findField(Order.class, key);
-            field.setAccessible(true);
-            ReflectionUtils.setField(field, order, value);
+            if (field != null) {
+                field.setAccessible(true);
+                ReflectionUtils.setField(field, order, value);
+            }
         });
 
         Order saved = orderRepository.save(order);
+        log.info("Partial update successful for order id={}", id);
+
         return ResponseEntity.ok(modelMapper.map(saved, OrderDto.class));
     }
 
-    // DELETE (optional – allowed for now)
+    // DELETE
     public ResponseEntity<Boolean> deleteById(Long id) {
+        log.info("Deleting order id={}", id);
+
         if (!orderRepository.existsById(id)) {
+            log.warn("Order not found for delete, id={}", id);
             throw new ResourceNotFoundException("Order not found with id " + id);
         }
+
         orderRepository.deleteById(id);
+        log.info("Order deleted successfully, id={}", id);
+
         return ResponseEntity.ok(Boolean.TRUE);
     }
 
+    // PLACE ORDER
     @Transactional
     public OrderResponseDto placeOrder(OrderRequestDto dto) {
 
-        // 1️⃣ Fetch user
-        User user = userRepository.findById(dto.getUserId())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        log.info("Placing order for userId={}", dto.getUserId());
 
-        // 2️⃣ Create order
+        User user = userRepository.findById(dto.getUserId())
+                .orElseThrow(() -> {
+                    log.warn("User not found userId={}", dto.getUserId());
+                    return new ResourceNotFoundException("User not found");
+                });
+
         Order order = new Order();
         order.setUser(user);
         order.setStatus("CREATED");
 
         List<OrderItem> items = new ArrayList<>();
 
-        // 3️⃣ Create order items
         for (OrderItemDto itemDto : dto.getItems()) {
 
+            log.info("Processing productId={} quantity={}",
+                    itemDto.getProductId(), itemDto.getQuantity());
+
             Product product = productRepository.findById(itemDto.getProductId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+                    .orElseThrow(() -> {
+                        log.warn("Product not found productId={}", itemDto.getProductId());
+                        return new ResourceNotFoundException("Product not found");
+                    });
 
             if (product.getQuantity() < itemDto.getQuantity()) {
+                log.error("Insufficient stock for productId={}, available={}, requested={}",
+                        product.getId(), product.getQuantity(), itemDto.getQuantity());
                 throw new RuntimeException("Insufficient stock for product " + product.getName());
             }
 
@@ -120,17 +158,14 @@ public class OrderService {
 
             items.add(item);
 
-            // reduce stock
             product.setQuantity(product.getQuantity() - itemDto.getQuantity());
         }
 
-        // 4️⃣ Attach items ONCE
         order.setItems(items);
-
-        // 5️⃣ Save ONCE (cascade saves order_items)
         Order savedOrder = orderRepository.save(order);
 
-        // 6️⃣ Map to response DTO
+        log.info("Order placed successfully, orderId={}", savedOrder.getId());
+
         return mapToOrderResponse(savedOrder);
     }
 
@@ -152,6 +187,4 @@ public class OrderService {
 
         return response;
     }
-
-
 }
