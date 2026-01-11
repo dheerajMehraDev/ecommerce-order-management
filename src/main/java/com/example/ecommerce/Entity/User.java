@@ -18,6 +18,8 @@ uniqueConstraints = {
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
+@ToString
 public class User {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
