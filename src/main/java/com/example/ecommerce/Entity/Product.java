@@ -29,10 +29,14 @@ public class Product {
 
     private Boolean active;
 
-
     @CreationTimestamp
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+    // product is child in db , and owning side in orm
 }

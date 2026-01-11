@@ -38,4 +38,7 @@ public class User {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    @OneToOne(mappedBy = "user")
+    private Product product;
+
 }
