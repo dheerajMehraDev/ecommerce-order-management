@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 @Slf4j
@@ -123,6 +124,18 @@ class EcommerceApplicationTests {
 		int expected = 10;
 		int result = calc(5,5);
 		assertThat(result).isEqualTo(expected);
+	}
+	double devide(int a , int b){
+		return a / b;
+	}
+	@Test
+	void test11(){
+		int a = 10;
+		int b = 0;
+		assertThatThrownBy(() -> devide(a, b))
+				.isInstanceOf(ArithmeticException.class)
+				.hasMessage("/ by zero");
+
 	}
 
 }
