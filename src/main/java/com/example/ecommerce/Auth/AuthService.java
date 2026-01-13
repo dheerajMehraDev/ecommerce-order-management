@@ -6,7 +6,6 @@ import com.example.ecommerce.DTO.UserDto;
 import com.example.ecommerce.Entity.User;
 import com.example.ecommerce.Repository.UserRepository;
 import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -50,6 +49,13 @@ public class AuthService {
         Cookie cookie = new Cookie("refreshToken" , refreshToken);
         cookie.setHttpOnly(true);
         response.addCookie(cookie);
+        return accessToken;
+    }
+
+    public String getAccessTokenFromRefreshToken(String refreshToekn) {
+        Long userIdFromToken = jwtService.getUserIdFromToken(refreshToekn);
+        User user = jwtService.getUserFromUserId(userIdFromToken);
+        String accessToken = jwtService.generateAccessJwt(user);
         return accessToken;
     }
 }
