@@ -6,19 +6,24 @@ import com.example.ecommerce.Repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
+//@DataJpaTest
+//@ActiveProfiles("test")
 @Slf4j
 class EcommerceApplicationTests {
 
-	@Autowired
+	/*@Autowired
 	UserRepository userRepository;
 	@Autowired
-	JwtService jwtService;
+	JwtService jwtService;*/
 	@Test
 	void contextLoads() {
 	}
