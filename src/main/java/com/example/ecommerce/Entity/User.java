@@ -1,6 +1,7 @@
 package com.example.ecommerce.Entity;
 
 
+import com.example.ecommerce.Entity.Enums.Roles;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -9,6 +10,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
@@ -53,9 +55,16 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<Order> orders = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user")
+    private List<Session> sessions = new ArrayList<>();
+
+    @Enumerated(value = EnumType.STRING)
+    private Roles role;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority( "ROLE_"+role.name());
+        return List.of(simpleGrantedAuthority);
     }
 
     @Override

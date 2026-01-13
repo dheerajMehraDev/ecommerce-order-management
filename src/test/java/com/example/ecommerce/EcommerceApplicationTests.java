@@ -1,17 +1,11 @@
 package com.example.ecommerce;
 
 import com.example.ecommerce.Auth.JwtService;
-import com.example.ecommerce.DTO.Projection.IUserDto;
-import com.example.ecommerce.DTO.Projection.UserDtoProjection;
 import com.example.ecommerce.Entity.User;
 import com.example.ecommerce.Repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 
 @SpringBootTest
 class EcommerceApplicationTests {
@@ -63,7 +57,7 @@ class EcommerceApplicationTests {
 	@Test
 	void testJwtGenerationAndVerify(){
 		User user = User.builder().id(1L).name("dheeraj").password("sdkjfs").build();
-		String token = jwtService.generateJwt(user);
+		String token = jwtService.generateAccessJwt(user);
 		System.out.println(token);
 		Long id = jwtService.getUserIdFromToken(token);
 		System.out.println(id);
