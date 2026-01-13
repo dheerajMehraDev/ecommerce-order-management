@@ -8,6 +8,8 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @SpringBootTest
 @Slf4j
 class EcommerceApplicationTests {
@@ -102,6 +104,25 @@ class EcommerceApplicationTests {
 	@Disabled
 	void test8(){
 		log.info("this will not run");
+	}
+
+	@Test
+	void test9(){
+		int a = 0 ;
+		int b = 2;
+		int result = a + b;
+		int expected  = calc(a,b);
+		Assertions.assertEquals(expected,result);
+	}
+	int calc(int a , int b){
+		return a + b ;
+	}
+
+	@Test
+	void test10(){
+		int expected = 10;
+		int result = calc(5,5);
+		assertThat(result).isEqualTo(expected);
 	}
 
 }
