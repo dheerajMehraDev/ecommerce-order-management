@@ -26,6 +26,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final SessionService sessionService;
 
 
 
@@ -49,6 +50,9 @@ public class AuthService {
         Cookie cookie = new Cookie("refreshToken" , refreshToken);
         cookie.setHttpOnly(true);
         response.addCookie(cookie);
+
+        // check for session
+        sessionService.setSession(user,refreshToken);
         return accessToken;
     }
 
@@ -56,6 +60,7 @@ public class AuthService {
         Long userIdFromToken = jwtService.getUserIdFromToken(refreshToekn);
         User user = jwtService.getUserFromUserId(userIdFromToken);
         String accessToken = jwtService.generateAccessJwt(user);
+        sessionService.validateSession(refreshToekn);
         return accessToken;
     }
 }
