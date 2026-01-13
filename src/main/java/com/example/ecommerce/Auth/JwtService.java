@@ -1,8 +1,11 @@
 package com.example.ecommerce.Auth;
 
+import com.example.ecommerce.Advices.ExceptionHandling.CustomExceptions.ResourceNotFoundException;
 import com.example.ecommerce.Entity.User;
+import com.example.ecommerce.Repository.UserRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +14,10 @@ import java.security.Key;
 import java.util.Date;
 
 @Service
+@RequiredArgsConstructor
 public class JwtService {
 
-
+    private final UserRepository userRepository;
     @Value(("${secret.key}"))
     private String secretKey;
 
@@ -43,4 +47,9 @@ public class JwtService {
         return Long.valueOf(subject);
     }
 
+    public User getUserFromUserId(Long userIdFromToken) {
+        return userRepository.findById(userIdFromToken).orElseThrow(
+                () -> new ResourceNotFoundException("user not found")
+        );
+    }
 }
