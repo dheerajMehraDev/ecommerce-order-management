@@ -1,16 +1,16 @@
 package com.example.ecommerce.Auth;
 
-import com.example.ecommerce.Advices.ApiResponse.ApiResponse;
 import com.example.ecommerce.DTO.LoginDto;
 import com.example.ecommerce.DTO.SignUpDto;
 import com.example.ecommerce.DTO.UserDto;
 import com.example.ecommerce.Entity.User;
 import com.example.ecommerce.Repository.UserRepository;
-import io.jsonwebtoken.Jwt;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -40,12 +40,16 @@ public class AuthService {
         return ResponseEntity.ok(userDto);
     }
 
-    public String login(@Valid LoginDto dto) {
+    public String login(@Valid LoginDto dto, HttpServletResponse response) {
         Authentication authentication = new UsernamePasswordAuthenticationToken(dto.getEmail(),dto.getPassword());
         Authentication authenticate = authenticationManager.authenticate(authentication);
 
         User user = (User) authenticate.getPrincipal();
-        String token = jwtService.generateJwt(user);
-        return token;
+        String accessToken = jwtService.generateAccessJwt(user);
+        String refreshToken = jwtService.generateRefreshJwt(user);
+        Cookie cookie = new Cookie("refreshToken" , refreshToken);
+        cookie.setHttpOnly(true);
+        response.addCookie(cookie);
+        return accessToken;
     }
 }

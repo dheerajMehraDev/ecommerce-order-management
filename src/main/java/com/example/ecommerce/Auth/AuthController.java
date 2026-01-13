@@ -25,10 +25,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public String login(@RequestBody @Valid LoginDto dto, HttpServletRequest request , HttpServletResponse response){
-        String token =  authService.login(dto);
-        Cookie cookie = new Cookie("token" , token);
-        cookie.setHttpOnly(true);
-        response.addCookie(cookie);
+        String token =  authService.login(dto,response);
         return token;
     }
 

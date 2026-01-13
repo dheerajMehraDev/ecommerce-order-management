@@ -25,13 +25,24 @@ public class JwtService {
     public Key getSecretKey(){
         return Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
     }
-    public String generateJwt(User user){
+    public String generateAccessJwt(User user){
         return
                 Jwts.builder()
                         .setSubject(user.getId().toString())
                         .claim("email" , user.getEmail())
                         .setIssuedAt(new Date())
                         .setExpiration(new Date(System.currentTimeMillis() + 1000 * 120))
+                        .signWith(getSecretKey())
+                        .compact();
+    }
+
+    public String generateRefreshJwt(User user){
+        return
+                Jwts.builder()
+                        .setSubject(user.getId().toString())
+                        .claim("email" , user.getEmail())
+                        .setIssuedAt(new Date())
+                        .setExpiration(new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 24 * 365))
                         .signWith(getSecretKey())
                         .compact();
     }
