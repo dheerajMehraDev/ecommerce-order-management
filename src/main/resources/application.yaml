@@ -26,6 +26,9 @@ spring:
     user:
       name: dheeraj
       password: dheeraj123
+#Secret key
+secret.key: sdkfjaskldjfaksjdfkjdlkjfkjoiewurx,nmckljq;jsdskfl
+
 #Actuator
 management:
   endpoints:

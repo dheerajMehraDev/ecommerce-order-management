@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 @Constraint(validatedBy = PasswordValidator.class)
-public @interface passwordValidationAnnotation {
+public @interface PasswordValidationAnnotation {
 
     String message() default "password should contain lowercase , uppercase , number and special character";
 

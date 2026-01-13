@@ -3,7 +3,7 @@ package com.example.ecommerce.Validation;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class PasswordValidator implements ConstraintValidator<passwordValidationAnnotation,String> {
+public class PasswordValidator implements ConstraintValidator<PasswordValidationAnnotation,String> {
 
 
     @Override
