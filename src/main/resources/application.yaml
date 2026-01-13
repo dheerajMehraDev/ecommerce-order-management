@@ -22,6 +22,10 @@ spring:
     init:
       mode: always
       data-locations: classpath:data.sql
+  security:
+    user:
+      name: dheeraj
+      password: dheeraj123
 #Actuator
 management:
   endpoints:
