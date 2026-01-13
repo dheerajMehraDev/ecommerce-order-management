@@ -22,6 +22,13 @@ spring:
     init:
       mode: always
       data-locations: classpath:data.sql
+  security:
+    user:
+      name: dheeraj
+      password: dheeraj123
+#Secret key
+secret.key: sdkfjaskldjfaksjdfkjdlkjfkjoiewurx,nmckljq;jsdskfl
+
 #Actuator
 management:
   endpoints:

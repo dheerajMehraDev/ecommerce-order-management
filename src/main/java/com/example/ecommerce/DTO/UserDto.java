@@ -1,6 +1,5 @@
 package com.example.ecommerce.DTO;
 
-import com.example.ecommerce.Validation.passwordValidationAnnotation;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -19,7 +18,4 @@ public class UserDto {
 
     @Email(message = "please provide valid email address")
     private String email;
-
-    @passwordValidationAnnotation
-    private String password;
 }
