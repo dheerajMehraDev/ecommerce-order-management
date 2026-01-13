@@ -1,5 +1,6 @@
 package com.example.ecommerce.DTO;
 
+import com.example.ecommerce.Entity.Enums.Roles;
 import com.example.ecommerce.Validation.PasswordValidationAnnotation;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -16,4 +17,6 @@ public class SignUpDto {
 
     @PasswordValidationAnnotation(message = "password is not secure enough")
     private String password;
+
+   private Roles role;
 }
