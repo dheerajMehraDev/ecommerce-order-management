@@ -19,7 +19,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Table(name = "users" , schema = "ecommerce" ,
+@Table(name = "users" ,
 uniqueConstraints = {
         @UniqueConstraint(columnNames = {"email", "password"})
 }
