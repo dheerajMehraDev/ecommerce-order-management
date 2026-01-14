@@ -45,8 +45,8 @@ public class UserControllerIT {
          dto  = modelMapper.map(savedUser, UserDto.class);
         webTestClient.get().uri("/user/{id}" , savedUser.getId())
                 .exchange()
-                .expectStatus().isOk();
-
+                .expectStatus().isOk()
+                .expectBody(ApiResponse.class);
 
     }
 }
