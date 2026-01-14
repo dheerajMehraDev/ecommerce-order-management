@@ -31,6 +31,7 @@ public class AuthConfig {
                 .authorizeHttpRequests(req ->
                         req.requestMatchers("/auth/**").permitAll()
                                 .requestMatchers("/orders/**").hasRole(ADMIN.toString())
+                                .requestMatchers("/user/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

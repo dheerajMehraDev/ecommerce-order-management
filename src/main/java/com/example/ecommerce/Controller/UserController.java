@@ -35,7 +35,7 @@ public class UserController {
     }
 
 // get user
-    @Secured("ROLE_USER")
+//    @Secured("ROLE_USER")
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUserById(@PathVariable Long id ){
         return userService.findById(id);
